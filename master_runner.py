@@ -103,7 +103,7 @@ def main():
     slot_mapping = get_slot_puzzle_mapping(args.slot) if args.slot else {}
 
     if args.page == "all":
-        target_pages = list_all_pages()
+        target_pages = [p["page_id"] for p in list_all_pages()]
     else:
         target_pages = [args.page]
 

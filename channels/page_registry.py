@@ -1,112 +1,103 @@
 """
 Page Profiles and Thematic Channel Registry for the Viral Puzzle Network.
-Assigns each Facebook Page its designated puzzle archetype and visual branding,
-allowing 7-12+ channels to run completely unique, infinite puzzle reels.
+Configured for the 6 Target Logic & Brain Teaser Facebook Pages.
+Each page has designated primary modes, studio visual themes, hashtags,
+and viral pinned engagement comments.
 """
 from typing import Dict, Any, List
 
 CHANNELS_REGISTRY: Dict[str, Dict[str, Any]] = {
-    # Page 1: Precision Reflex & Shadow Silhouette Match
-    "1319646877895110": {
-        "slug": "brainfocus",
-        "name": "BrainFocus Taps",
-        "tagline": "Precision Reflex & Microsecond Timing",
-        "primary_mode": "pause_silhouette",
-        "supported_modes": ["pause_silhouette", "grid_hunter"],
+    # Page 1: Logical Rhinos
+    "1300440873161089": {
+        "slug": "logical_rhinos",
+        "name": "Logical Rhinos",
+        "tagline": "Sharpen Your Instincts • Daily Brain Teasers & Viral Logic Puzzles",
+        "primary_mode": "grid_hunter",
+        "supported_modes": ["grid_hunter", "pemdas_math", "tangled_wires", "pause_silhouette"],
         "theme": "dark_slate",
-        "hashtags": ["#BrainFocus", "#ReflexTest", "#PauseChallenge", "#MindGames", "#ViralReels"]
+        "hashtags": ["#LogicalRhinos", "#LogicPuzzle", "#BrainTeaser", "#OddOneOut", "#ViralReels", "#IQTest"],
+        "pinned_comment": "🦏 97% fail on their first try! What is your exact coordinate or answer? Drop it below and debate! 👇"
     },
 
-    # Page 2: Viral PEMDAS & Order of Operations Math Trap
-    "1309712825557751": {
-        "slug": "mindmath",
-        "name": "MindMath Taps",
-        "tagline": "Mental Math & Calculation Order Debates",
+    # Page 2: Bison Logics
+    "1321506077717337": {
+        "slug": "bison_logics",
+        "name": "Bison Logics",
+        "tagline": "Unstoppable Mind Power • Daily Deduction & Math Puzzles",
         "primary_mode": "pemdas_math",
-        "supported_modes": ["pemdas_math", "grid_hunter"],
+        "supported_modes": ["pemdas_math", "matchstick_puzzle", "optical_swirl", "word_guess"],
         "theme": "dark_slate",
-        "hashtags": ["#MindMath", "#MathIQ", "#PEMDAS", "#MathDebate", "#BrainTraining", "#ViralReels"]
+        "hashtags": ["#BisonLogics", "#MathIQ", "#PEMDAS", "#MathDebate", "#BrainTraining", "#ViralReels"],
+        "pinned_comment": "🦬 Only 1 in 100 solve this correctly without pausing! What is your answer? Comment below! 👇"
     },
 
-    # Page 3: Odd-One-Out Grid Matrix & Coordinate Search
-    "1350182274839663": {
-        "slug": "mindquiz",
-        "name": "MindQuiz Focus",
-        "tagline": "Observation IQ & Odd-One-Out Hunter",
-        "primary_mode": "grid_hunter",
-        "supported_modes": ["grid_hunter", "optical_swirl"],
-        "theme": "dark_slate",
-        "hashtags": ["#MindQuiz", "#OddOneOut", "#SpotTheDifference", "#ObservationTest", "#ViralReels"]
-    },
-
-    # Page 4: Hypnotic Optical Swirl & Hidden Number Decoder
-    "1334005973127654": {
-        "slug": "mindview",
-        "name": "MindView Taps",
-        "tagline": "Hypnotic Optical Illusions & Hidden Code Decoders",
+    # Page 3: LogicSteps Lens
+    "1313658835168646": {
+        "slug": "logicsteps_lens",
+        "name": "LogicSteps Lens",
+        "tagline": "Look Closer • Step-by-Step Logic Riddles & Hidden Clues",
         "primary_mode": "optical_swirl",
-        "supported_modes": ["optical_swirl", "tangled_wires"],
-        "theme": "dark_slate",
-        "hashtags": ["#MindView", "#OpticalIllusion", "#MagicEye", "#VisualPuzzle", "#ViralReels"]
-    },
-
-    # Page 5: Word Completion & Vocabulary Speed Drills
-    "1316150674917146": {
-        "slug": "brainfog",
-        "name": "BrainFog Taps",
-        "tagline": "Morning Brain Wake-Up & Vocabulary Drills",
-        "primary_mode": "word_guess",
-        "supported_modes": ["word_guess", "rebus_puzzle"],
-        "theme": "deep_purple",
-        "hashtags": ["#BrainFog", "#WordPuzzle", "#VocabularyChallenge", "#BrainWakeup", "#ViralReels"]
-    },
-
-    # Page 6: Tangled Cord & Wire Path Solver
-    "1227319627140685": {
-        "slug": "braintaps_flow",
-        "name": "BrainTaps Flow",
-        "tagline": "Satisfying Logic Wire Maze & Flow Paths",
-        "primary_mode": "tangled_wires",
-        "supported_modes": ["tangled_wires", "pause_silhouette"],
+        "supported_modes": ["optical_swirl", "shape_counter", "shadow_glitch", "grid_hunter"],
         "theme": "vibrant_navy",
-        "hashtags": ["#BrainTapsFlow", "#TangledWires", "#WireMaze", "#SatisfyingLogic", "#ViralReels"]
+        "hashtags": ["#LogicSteps", "#OpticalIllusion", "#HiddenNumber", "#LookCloser", "#ViralReels"],
+        "pinned_comment": "🔍 Did you spot the number in time or did you need to replay? Comment your answer and how many seconds it took! 👇"
     },
 
-    # Page 7: Rebus & Emoji Word Equations
-    "1384807541372867": {
-        "slug": "planview_lens",
-        "name": "PlanView Lens",
-        "tagline": "Visual Rebus Equations & Symbolic Deductions",
+    # Page 4: Avenue Logics
+    "1276928968848084": {
+        "slug": "avenue_logics",
+        "name": "Avenue Logics",
+        "tagline": "The Premier Boulevard for Razor-Sharp Minds • Daily Brain Games",
         "primary_mode": "rebus_puzzle",
-        "supported_modes": ["rebus_puzzle", "grid_hunter"],
-        "theme": "vibrant_navy",
-        "hashtags": ["#PlanView", "#RebusPuzzle", "#EmojiPuzzle", "#WordFormula", "#ViralReels"]
+        "supported_modes": ["rebus_puzzle", "word_guess", "pemdas_math", "grid_hunter"],
+        "theme": "deep_purple",
+        "hashtags": ["#AvenueLogics", "#RebusPuzzle", "#WordRiddle", "#BrainGames", "#ViralReels"],
+        "pinned_comment": "⚡ Are you Team A or Team B? Explain your logic in the comments and see who agrees with you! 👇"
     },
 
-    # Page 8: Infinite Shape / Pattern Counter
-    "1340879302432137": {
-        "slug": "buildings_bountsy",
-        "name": "Buildings Bountsy",
-        "tagline": "Spatial Geometry & Shape Counting Tests",
-        "primary_mode": "grid_hunter",
-        "supported_modes": ["grid_hunter", "optical_swirl"],
+    # Page 5: LostLogic Lens
+    "1236588396214516": {
+        "slug": "lostlogic_lens",
+        "name": "LostLogic Lens",
+        "tagline": "Finding Logic in the Impossible • High-Difficulty Logic Mysteries",
+        "primary_mode": "tangled_wires",
+        "supported_modes": ["tangled_wires", "shadow_glitch", "pause_silhouette", "optical_swirl"],
+        "theme": "vibrant_navy",
+        "hashtags": ["#LostLogic", "#WireMaze", "#FingerTrace", "#SatisfyingLogic", "#ViralReels"],
+        "pinned_comment": "🧭 Trace it carefully with your finger! Which wire actually connects? Comment the correct number below! 👇"
+    },
+
+    # Page 6: LogicFix Lens
+    "1345900581939535": {
+        "slug": "logicfix_lens",
+        "name": "LogicFix Lens",
+        "tagline": "Your Daily Brain Fix • Addictive Logic & Reflex Puzzles",
+        "primary_mode": "matchstick_puzzle",
+        "supported_modes": ["matchstick_puzzle", "pause_silhouette", "shape_counter", "grid_hunter"],
         "theme": "clean_light",
-        "hashtags": ["#BuildingsBountsy", "#GeometryPuzzle", "#CountTheShapes", "#BrainTeaser", "#ViralReels"]
+        "hashtags": ["#LogicFix", "#MatchstickPuzzle", "#EquationFix", "#MindWorkout", "#ViralReels"],
+        "pinned_comment": "💡 Can you fix this equation or spot the anomaly in under 10 seconds? Drop your move below! 👇"
     }
 }
 
 def get_channel_config(page_id: str) -> Dict[str, Any]:
     """Returns the profile configuration for a given Facebook page ID."""
     return CHANNELS_REGISTRY.get(page_id, {
-        "slug": "generic_page",
-        "name": "Viral Puzzle Reels",
-        "tagline": "Infinite Viral Puzzles",
+        "slug": f"page_{page_id}",
+        "name": f"Logic Channel {page_id[-4:]}",
+        "tagline": "Daily Viral Brain & Logic Puzzles",
         "primary_mode": "grid_hunter",
-        "supported_modes": ["grid_hunter", "optical_swirl", "pemdas_math"],
+        "supported_modes": ["grid_hunter", "pemdas_math", "tangled_wires"],
         "theme": "dark_slate",
-        "hashtags": ["#ViralPuzzles", "#BrainTeaser", "#ViralReels"]
+        "hashtags": ["#BrainPuzzles", "#LogicIQ", "#ViralReels"],
+        "pinned_comment": "🔥 Comment your solution below and challenge a friend! 👇"
     })
 
-def list_all_pages() -> List[str]:
-    """Returns list of all active Facebook Page IDs."""
-    return list(CHANNELS_REGISTRY.keys())
+def list_all_pages() -> List[Dict[str, Any]]:
+    """Returns all registered channels as a list with page_id injected."""
+    res = []
+    for pid, cfg in CHANNELS_REGISTRY.items():
+        item = dict(cfg)
+        item["page_id"] = pid
+        res.append(item)
+    return res

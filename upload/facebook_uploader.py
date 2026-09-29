@@ -10,7 +10,10 @@ import requests
 from pathlib import Path
 from typing import Dict, Any, Optional
 
-LOCAL_TOKENS_PATH = Path(r"C:\Users\kreg9\facebook_pages_tokens.json")
+LOCAL_TOKENS_PATHS = [
+    Path(r"C:\Users\kreg9\logic_pages_tokens.json"),
+    Path(r"C:\Users\kreg9\facebook_pages_tokens.json")
+]
 
 def load_page_tokens() -> Dict[str, Any]:
     """Loads page tokens from environment secret or local tokens store."""
@@ -22,12 +25,15 @@ def load_page_tokens() -> Dict[str, Any]:
         except Exception as e:
             print(f"[uploader] Notice parsing FACEBOOK_PAGES_JSON: {e}")
 
-    if not tokens and LOCAL_TOKENS_PATH.exists():
-        try:
-            with open(LOCAL_TOKENS_PATH, "r", encoding="utf-8") as f:
-                tokens = json.load(f)
-        except Exception as e:
-            print(f"[uploader] Notice reading local tokens: {e}")
+    for p in LOCAL_TOKENS_PATHS:
+        if p.exists():
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    if isinstance(data, dict):
+                        tokens.update(data)
+            except Exception as e:
+                print(f"[uploader] Notice reading {p.name}: {e}")
 
     return tokens
 

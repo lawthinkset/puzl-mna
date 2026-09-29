@@ -1,7 +1,7 @@
 """
 Cross-Page Multi-Slot Posting Matrix & Round-Robin Scheduler.
-Coordinates 4-5 daily posting runs across 6-12 Facebook Pages ensuring:
-1. Every page posts a DIFFERENT puzzle type in any given time slot (zero duplicate posting).
+Coordinates 5 daily posting runs across the 6 Logic Facebook Pages ensuring:
+1. Every page posts a DIFFERENT puzzle archetype in any given time slot (zero duplicate posting).
 2. Across the day, all pages cycle through all 10 viral puzzle archetypes.
 """
 from typing import Dict, List, Tuple
@@ -24,7 +24,8 @@ def get_slot_puzzle_mapping(slot_number: int = 1) -> Dict[str, str]:
     # Calculate round-robin offset based on slot_number
     base_offset = (slot_number - 1) * 2
 
-    for p_idx, page_id in enumerate(pages):
+    for p_idx, p_info in enumerate(pages):
+        page_id = p_info["page_id"]
         mode_idx = (base_offset + p_idx) % num_modes
         mapping[page_id] = PUZZLE_MODES[mode_idx]
 
