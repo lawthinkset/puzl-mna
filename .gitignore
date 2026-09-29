@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Output renders and temporary artifacts
+output/*.mp4
+output/*.wav
+output/*.jpg
+output/*.png
+output/test_samples/
+temp_*
+*.tmp
+
+# Secrets and tokens
+*.env
+.env*
+*token*.json
+credentials.json
+
+# IDE and OS files
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
