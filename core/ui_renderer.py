@@ -106,9 +106,9 @@ def draw_header_banner(
     b_font = get_font(30)
     
     # Left Badge (e.g. 99% FAIL)
-    bw1 = 250
-    draw.rounded_rectangle([42, badge_y, 42 + bw1, badge_y + 54], radius=16, fill=(225, 29, 72))
     b1_box = draw.textbbox((0, 0), badge_text, font=b_font)
+    bw1 = max(240, (b1_box[2] - b1_box[0]) + 36)
+    draw.rounded_rectangle([42, badge_y, 42 + bw1, badge_y + 54], radius=16, fill=(225, 29, 72))
     draw.text((42 + (bw1 - (b1_box[2]-b1_box[0]))//2, badge_y + (54 - (b1_box[3]-b1_box[1]))//2 - b1_box[1]), badge_text, fill=(255, 255, 255), font=b_font)
     
     # Right Badge (e.g. page name or "FIND IT FAST")
@@ -176,12 +176,20 @@ def draw_bottom_cta(
         pill_fill = (15, 23, 42, 240)
 
     clean_cta = clean_ascii_text(cta_text).upper()
+    font_size = 36
+    font = get_font(font_size)
     bbox = draw.textbbox((0, 0), clean_cta, font=font)
     tw = bbox[2] - bbox[0]
+    while tw > (width - 160) and font_size > 20:
+        font_size -= 2
+        font = get_font(font_size)
+        bbox = draw.textbbox((0, 0), clean_cta, font=font)
+        tw = bbox[2] - bbox[0]
+
     th = bbox[3] - bbox[1]
     
     bar_w = min(width - 80, tw + 80)
-    bar_h = 76
+    bar_h = max(76, th + 36)
     bx1 = (width - bar_w) // 2
     bx2 = bx1 + bar_w
     
@@ -191,6 +199,57 @@ def draw_bottom_cta(
     draw.rounded_rectangle([bx1, bot_y, bx2, bot_y + bar_h], radius=22, fill=pill_fill, outline=border_c, width=3)
     # Text
     draw.text((bx1 + (bar_w - tw) // 2, bot_y + (bar_h - th) // 2 - bbox[1]), clean_cta, fill=(255, 255, 255), font=font)
+
+def draw_fitted_card(
+    draw: ImageDraw.ImageDraw,
+    cx: int,
+    cy: int,
+    text: str,
+    max_font_size: int = 40,
+    min_font_size: int = 22,
+    max_width: int = 1000,
+    min_width: int = 400,
+    padding_x: int = 40,
+    padding_y: int = 24,
+    fill_color: Tuple = (15, 23, 42, 230),
+    border_color: Tuple = (234, 179, 8),
+    border_width: int = 3,
+    corner_radius: int = 20,
+    text_color: Tuple = (255, 255, 255)
+) -> Tuple[int, int, int, int]:
+    """
+    Renders a container card centered at (cx, cy) with text strictly guaranteed
+    to never overflow the container. Dynamically downscales font and sizes box.
+    """
+    clean_text = clean_ascii_text(text)
+    font_size = max_font_size
+    font = get_font(font_size)
+    bbox = draw.textbbox((0, 0), clean_text, font=font)
+    tw = bbox[2] - bbox[0]
+    
+    while tw > (max_width - 2 * padding_x) and font_size > min_font_size:
+        font_size -= 2
+        font = get_font(font_size)
+        bbox = draw.textbbox((0, 0), clean_text, font=font)
+        tw = bbox[2] - bbox[0]
+        
+    th = bbox[3] - bbox[1]
+    card_w = min(max_width, max(min_width, tw + 2 * padding_x))
+    card_h = th + 2 * padding_y
+    
+    x1 = cx - card_w // 2
+    y1 = cy - card_h // 2
+    x2 = x1 + card_w
+    y2 = y1 + card_h
+    
+    # Drop shadow
+    draw.rounded_rectangle([x1 + 3, y1 + 4, x2 + 3, y2 + 4], radius=corner_radius, fill=(0, 0, 0, 90))
+    # Card surface
+    draw.rounded_rectangle([x1, y1, x2, y2], radius=corner_radius, fill=fill_color, outline=border_color, width=border_width)
+    # Centered text
+    draw.text((x1 + (card_w - tw) // 2, y1 + (card_h - th) // 2 - bbox[1]), clean_text, fill=text_color, font=font)
+    
+    return (x1, y1, x2, y2)
 
 def draw_multiple_choice_options(
     draw: ImageDraw.ImageDraw,

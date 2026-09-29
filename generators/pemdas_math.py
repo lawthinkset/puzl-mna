@@ -127,6 +127,8 @@ class PemdasMathGenerator(BaseGenerator):
         }
 
     def render_frame(self, t: float, duration: float) -> np.ndarray:
+        if not self.puzzle_data:
+            self.puzzle_data = self.generate_puzzle_state()
         state = self.puzzle_data
 
         # 1. Base gradient

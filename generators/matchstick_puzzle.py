@@ -10,7 +10,8 @@ from core.ui_renderer import (
     draw_gradient_background,
     draw_header_banner,
     draw_timer_bar,
-    draw_bottom_cta
+    draw_bottom_cta,
+    draw_fitted_card
 )
 from generators.base_generator import BaseGenerator
 
@@ -98,6 +99,8 @@ class MatchstickPuzzleGenerator(BaseGenerator):
         }
 
     def render_frame(self, t: float, duration: float) -> np.ndarray:
+        if not self.puzzle_data:
+            self.puzzle_data = self.generate_puzzle_state()
         state = self.puzzle_data
 
         # 1. Base gradient
@@ -155,17 +158,23 @@ class MatchstickPuzzleGenerator(BaseGenerator):
 
             curr_x += w + spacing
 
-        # 4. Challenge Rule Banner
-        rule_y = 940
-        rule_w = 760
-        rule_h = 100
-        rx1 = (self.width - rule_w) // 2
-        rx2 = rx1 + rule_w
-        draw.rounded_rectangle([rx1, rule_y, rx2, rule_y + rule_h], radius=22, fill=(15, 23, 42, 235), outline=(234, 179, 8), width=3)
-        r_font = get_font(42)
-        r_text = "MOVE EXACTLY 1 MATCHSTICK!"
-        rbox = draw.textbbox((0, 0), r_text, font=r_font)
-        draw.text((rx1 + (rule_w - (rbox[2]-rbox[0]))//2, rule_y + (rule_h - (rbox[3]-rbox[1]))//2 - rbox[1]), r_text, fill=(234, 179, 8), font=r_font)
+        # 4. Challenge Rule Banner (Guaranteed no overflow)
+        draw_fitted_card(
+            draw=draw,
+            cx=self.width // 2,
+            cy=990,
+            text="MOVE EXACTLY 1 MATCHSTICK!",
+            max_font_size=38,
+            min_font_size=24,
+            max_width=980,
+            padding_x=36,
+            padding_y=22,
+            fill_color=(15, 23, 42, 235),
+            border_color=(234, 179, 8),
+            border_width=3,
+            corner_radius=22,
+            text_color=(234, 179, 8)
+        )
 
         # 5. Explanatory Provocation Board
         exp_y = 1100

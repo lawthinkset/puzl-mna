@@ -13,7 +13,7 @@ CHANNELS_REGISTRY: Dict[str, Dict[str, Any]] = {
         "name": "Logical Rhinos",
         "tagline": "Sharpen Your Instincts • Daily Brain Teasers & Viral Logic Puzzles",
         "primary_mode": "grid_hunter",
-        "supported_modes": ["grid_hunter", "pemdas_math", "tangled_wires", "pause_silhouette"],
+        "supported_modes": ["grid_hunter", "pemdas_math", "logic_lock", "pause_silhouette"],
         "theme": "dark_slate",
         "hashtags": ["#LogicalRhinos", "#LogicPuzzle", "#BrainTeaser", "#OddOneOut", "#ViralReels", "#IQTest"],
         "pinned_comment": "🦏 97% fail on their first try! What is your exact coordinate or answer? Drop it below and debate! 👇"
@@ -60,11 +60,11 @@ CHANNELS_REGISTRY: Dict[str, Dict[str, Any]] = {
         "slug": "lostlogic_lens",
         "name": "LostLogic Lens",
         "tagline": "Finding Logic in the Impossible • High-Difficulty Logic Mysteries",
-        "primary_mode": "tangled_wires",
-        "supported_modes": ["tangled_wires", "shadow_glitch", "pause_silhouette", "optical_swirl"],
+        "primary_mode": "logic_lock",
+        "supported_modes": ["logic_lock", "shadow_glitch", "pause_silhouette", "optical_swirl"],
         "theme": "vibrant_navy",
-        "hashtags": ["#LostLogic", "#WireMaze", "#FingerTrace", "#SatisfyingLogic", "#ViralReels"],
-        "pinned_comment": "🧭 Trace it carefully with your finger! Which wire actually connects? Comment the correct number below! 👇"
+        "hashtags": ["#LostLogic", "#CrackTheCode", "#VaultPuzzle", "#BrainTeaser", "#LogicIQ", "#ViralReels"],
+        "pinned_comment": "🔐 Only 2% can deduce all 3 digits before time runs out! What is your code? Drop it below! 👇"
     },
 
     # Page 6: LogicFix Lens
@@ -87,7 +87,7 @@ def get_channel_config(page_id: str) -> Dict[str, Any]:
         "name": f"Logic Channel {page_id[-4:]}",
         "tagline": "Daily Viral Brain & Logic Puzzles",
         "primary_mode": "grid_hunter",
-        "supported_modes": ["grid_hunter", "pemdas_math", "tangled_wires"],
+        "supported_modes": ["grid_hunter", "pemdas_math", "logic_lock"],
         "theme": "dark_slate",
         "hashtags": ["#BrainPuzzles", "#LogicIQ", "#ViralReels"],
         "pinned_comment": "🔥 Comment your solution below and challenge a friend! 👇"

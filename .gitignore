@@ -9,6 +9,7 @@ output/*.wav
 output/*.jpg
 output/*.png
 output/test_samples/
+output/snapshots/
 temp_*
 *.tmp
 

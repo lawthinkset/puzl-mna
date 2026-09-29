@@ -7,5 +7,6 @@ from .ui_renderer import (
     draw_header_banner,
     draw_timer_bar,
     draw_bottom_cta,
-    draw_multiple_choice_options
+    draw_multiple_choice_options,
+    draw_fitted_card
 )

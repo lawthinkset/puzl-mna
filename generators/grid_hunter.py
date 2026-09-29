@@ -32,9 +32,10 @@ CONFUSING_PAIRS = [
     ("K", "X"), ("S", "5"), ("Z", "2"), ("I", "1"),
     ("W", "M"), ("H", "N"), ("T", "7"), ("Y", "V"),
     ("A", "4"), ("J", "L"), ("Q", "O"), ("F", "E"),
-    # Deceptive geometric symbols
-    ("★", "☆"), ("●", "◐"), ("▲", "▼"), ("◆", "◇"),
-    ("■", "□"), ("◎", "◉")
+    # Highly deceptive 2/3-letter alphanumeric pairs
+    ("RN", "M"), ("CL", "D"), ("VV", "W"), ("NN", "M"),
+    ("DO", "DD"), ("BB", "88"), ("CO", "CC"), ("EF", "EE"),
+    ("888", "808"), ("707", "777"), ("909", "999"), ("101", "111")
 ]
 
 class GridHunterGenerator(BaseGenerator):
@@ -72,6 +73,8 @@ class GridHunterGenerator(BaseGenerator):
         }
 
     def render_frame(self, t: float, duration: float) -> np.ndarray:
+        if not self.puzzle_data:
+            self.puzzle_data = self.generate_puzzle_state()
         state = self.puzzle_data
         
         # 1. Base gradient background

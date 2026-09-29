@@ -12,7 +12,8 @@ from core.ui_renderer import (
     draw_gradient_background,
     draw_header_banner,
     draw_timer_bar,
-    draw_bottom_cta
+    draw_bottom_cta,
+    draw_fitted_card
 )
 from generators.base_generator import BaseGenerator
 
@@ -132,6 +133,8 @@ class RebusPuzzleGenerator(BaseGenerator):
         }
 
     def render_frame(self, t: float, duration: float) -> np.ndarray:
+        if not self.puzzle_data:
+            self.puzzle_data = self.generate_puzzle_state()
         state = self.puzzle_data
 
         # 1. Base gradient
@@ -219,17 +222,23 @@ class RebusPuzzleGenerator(BaseGenerator):
                 w_box = draw.textbbox((0, 0), word, font=font_large)
                 draw.text((x_word, cy - (w_box[3] - w_box[1]) // 2 - w_box[1]), word, fill=(255, 255, 255), font=font_large)
 
-        # 4. Engagement Prompt Card
-        call_y = 1480
-        call_w = 760
-        call_h = 100
-        cx1 = (self.width - call_w) // 2
-        cx2 = cx1 + call_w
-        draw.rounded_rectangle([cx1, call_y, cx2, call_y + call_h], radius=22, fill=(15, 23, 42, 235), outline=(56, 189, 248), width=3)
-        c_font = get_font(38)
-        c_msg = "FIGURE OUT THE PATTERN & SOLVE LINE 3!"
-        cbox = draw.textbbox((0, 0), c_msg, font=c_font)
-        draw.text((cx1 + (call_w - (cbox[2]-cbox[0]))//2, call_y + (call_h - (cbox[3]-cbox[1]))//2 - cbox[1]), c_msg, fill=(255, 255, 255), font=c_font)
+        # 4. Engagement Prompt Card (Guaranteed no overflow)
+        draw_fitted_card(
+            draw=draw,
+            cx=self.width // 2,
+            cy=1530,
+            text="FIGURE OUT THE PATTERN & SOLVE LINE 3!",
+            max_font_size=36,
+            min_font_size=24,
+            max_width=980,
+            padding_x=36,
+            padding_y=22,
+            fill_color=(15, 23, 42, 235),
+            border_color=(56, 189, 248),
+            border_width=3,
+            corner_radius=22,
+            text_color=(255, 255, 255)
+        )
 
         # 5. Bottom CTA (Never reveals answer!)
         cta_msg = "SOLVE LINE 3 AND COMMENT YOUR ANSWER!"

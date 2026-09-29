@@ -9,16 +9,17 @@ from .pause_silhouette import PauseSilhouetteGenerator
 from .matchstick_puzzle import MatchstickPuzzleGenerator
 from .shape_counter import ShapeCounterGenerator
 from .shadow_glitch import ShadowGlitchGenerator
+from .logic_lock import LogicLockGenerator
 
 ALL_GENERATORS = {
     "grid_hunter": GridHunterGenerator,
+    "logic_lock": LogicLockGenerator,
     "optical_swirl": OpticalSwirlGenerator,
     "pemdas_math": PemdasMathGenerator,
     "rebus_puzzle": RebusPuzzleGenerator,
     "word_guess": WordGuessGenerator,
-    "tangled_wires": TangledWiresGenerator,
-    "pause_silhouette": PauseSilhouetteGenerator,
     "matchstick_puzzle": MatchstickPuzzleGenerator,
     "shape_counter": ShapeCounterGenerator,
-    "shadow_glitch": ShadowGlitchGenerator
+    "shadow_glitch": ShadowGlitchGenerator,
+    "pause_silhouette": PauseSilhouetteGenerator
 }

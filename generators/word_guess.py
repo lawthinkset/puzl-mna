@@ -10,7 +10,8 @@ from core.ui_renderer import (
     draw_gradient_background,
     draw_header_banner,
     draw_timer_bar,
-    draw_bottom_cta
+    draw_bottom_cta,
+    draw_fitted_card
 )
 from generators.base_generator import BaseGenerator
 
@@ -85,6 +86,8 @@ class WordGuessGenerator(BaseGenerator):
         }
 
     def render_frame(self, t: float, duration: float) -> np.ndarray:
+        if not self.puzzle_data:
+            self.puzzle_data = self.generate_puzzle_state()
         state = self.puzzle_data
 
         # 1. Base gradient
@@ -116,9 +119,14 @@ class WordGuessGenerator(BaseGenerator):
         tbox = draw.textbbox((0, 0), c_title, font=c_font)
         draw.text((clue_x1 + (clue_w - (tbox[2]-tbox[0]))//2, clue_y1 + 40), c_title, fill=(234, 179, 8), font=c_font)
 
-        hint_font = get_font(52)
+        hint_font_size = 52
+        hint_font = get_font(hint_font_size)
         hint_text = f"\"{state['hint'].upper()}\""
         hbox = draw.textbbox((0, 0), hint_text, font=hint_font)
+        while (hbox[2] - hbox[0]) > (clue_w - 60) and hint_font_size > 28:
+            hint_font_size -= 2
+            hint_font = get_font(hint_font_size)
+            hbox = draw.textbbox((0, 0), hint_text, font=hint_font)
         draw.text((clue_x1 + (clue_w - (hbox[2]-hbox[0]))//2, clue_y1 + 120), hint_text, fill=(255, 255, 255), font=hint_font)
 
         # 4. Scrambled Floating Letter Cards (with subtle organic floating oscillation)
@@ -170,17 +178,23 @@ class WordGuessGenerator(BaseGenerator):
             # Slot underline placeholder
             draw.line([sx1 + 25, sy2 - 30, sx2 - 25, sy2 - 30], fill=(148, 163, 184), width=4)
 
-        # 6. Viral Tension Tease Card
-        tease_y = 1380
-        tease_w = 760
-        tease_h = 100
-        tx1 = (self.width - tease_w) // 2
-        tx2 = tx1 + tease_w
-        draw.rounded_rectangle([tx1, tease_y, tx2, tease_y + tease_h], radius=22, fill=(15, 23, 42, 230), outline=(234, 179, 8), width=3)
-        t_font = get_font(40)
-        t_msg = "CAN YOU UNSCRAMBLE IT IN 14 SECONDS?"
-        tb = draw.textbbox((0, 0), t_msg, font=t_font)
-        draw.text((tx1 + (tease_w - (tb[2]-tb[0]))//2, tease_y + (tease_h - (tb[3]-tb[1]))//2 - tb[1]), t_msg, fill=(255, 255, 255), font=t_font)
+        # 6. Viral Tension Tease Card (Guaranteed never to overflow)
+        draw_fitted_card(
+            draw=draw,
+            cx=self.width // 2,
+            cy=1430,
+            text="CAN YOU UNSCRAMBLE IT IN 14 SECONDS?",
+            max_font_size=36,
+            min_font_size=24,
+            max_width=980,
+            padding_x=36,
+            padding_y=22,
+            fill_color=(15, 23, 42, 230),
+            border_color=(234, 179, 8),
+            border_width=3,
+            corner_radius=22,
+            text_color=(255, 255, 255)
+        )
 
         # 7. Bottom Viral Call To Action (Never reveals answer!)
         cta_msg = "TYPE YOUR UNSCRAMBLED WORD IN COMMENTS!"

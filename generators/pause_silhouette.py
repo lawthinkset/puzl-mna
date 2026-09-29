@@ -12,7 +12,8 @@ from core.ui_renderer import (
     draw_gradient_background,
     draw_header_banner,
     draw_timer_bar,
-    draw_bottom_cta
+    draw_bottom_cta,
+    draw_fitted_card
 )
 from generators.base_generator import BaseGenerator
 
@@ -83,6 +84,8 @@ class PauseSilhouetteGenerator(BaseGenerator):
         }
 
     def render_frame(self, t: float, duration: float) -> np.ndarray:
+        if not self.puzzle_data:
+            self.puzzle_data = self.generate_puzzle_state()
         state = self.puzzle_data
 
         # 1. Base gradient
@@ -148,17 +151,23 @@ class PauseSilhouetteGenerator(BaseGenerator):
 
             pil_frame.paste(sprite, (curr_x, curr_y), sprite)
 
-        # 3. Microsecond Precision Callout Card
-        p_card_y = 1380
-        p_card_w = 680
-        p_card_h = 96
-        px1 = (self.width - p_card_w) // 2
-        px2 = px1 + p_card_w
-        draw.rounded_rectangle([px1, p_card_y, px2, p_card_y + p_card_h], radius=22, fill=(15, 23, 42, 235), outline=(56, 189, 248), width=3)
-        p_font = get_font(40)
-        p_text = "TAP SCREEN TO PAUSE THE EXACT FRAME!"
-        pbox = draw.textbbox((0, 0), p_text, font=p_font)
-        draw.text((px1 + (p_card_w - (pbox[2]-pbox[0]))//2, p_card_y + (p_card_h - (pbox[3]-pbox[1]))//2 - pbox[1]), p_text, fill=(255, 255, 255), font=p_font)
+        # 3. Microsecond Precision Callout Card (Guaranteed no overflow)
+        draw_fitted_card(
+            draw=draw,
+            cx=self.width // 2,
+            cy=1430,
+            text="TAP SCREEN TO PAUSE THE EXACT FRAME!",
+            max_font_size=36,
+            min_font_size=24,
+            max_width=980,
+            padding_x=36,
+            padding_y=22,
+            fill_color=(15, 23, 42, 235),
+            border_color=(56, 189, 248),
+            border_width=3,
+            corner_radius=22,
+            text_color=(255, 255, 255)
+        )
 
         # 4. Bottom Viral CTA (Never stops—forces pause!)
         cta_msg = "POST YOUR SCREENSHOT IN COMMENTS!"
