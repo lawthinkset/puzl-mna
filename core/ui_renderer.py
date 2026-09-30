@@ -176,11 +176,11 @@ def draw_bottom_cta(
         pill_fill = (15, 23, 42, 240)
 
     clean_cta = clean_ascii_text(cta_text).upper()
-    font_size = 36
+    font_size = 34
     font = get_font(font_size)
     bbox = draw.textbbox((0, 0), clean_cta, font=font)
     tw = bbox[2] - bbox[0]
-    while tw > (width - 160) and font_size > 20:
+    while tw > (width - 240) and font_size > 18:
         font_size -= 2
         font = get_font(font_size)
         bbox = draw.textbbox((0, 0), clean_cta, font=font)
@@ -188,15 +188,15 @@ def draw_bottom_cta(
 
     th = bbox[3] - bbox[1]
     
-    bar_w = min(width - 80, tw + 80)
-    bar_h = max(76, th + 36)
+    bar_w = min(width - 100, max(520, tw + 100))
+    bar_h = max(80, th + 40)
     bx1 = (width - bar_w) // 2
     bx2 = bx1 + bar_w
     
     # Drop shadow
-    draw.rounded_rectangle([bx1 + 3, bot_y + 4, bx2 + 3, bot_y + bar_h + 4], radius=22, fill=(0, 0, 0, 90))
+    draw.rounded_rectangle([bx1 + 3, bot_y + 4, bx2 + 3, bot_y + bar_h + 4], radius=24, fill=(0, 0, 0, 90))
     # Pill
-    draw.rounded_rectangle([bx1, bot_y, bx2, bot_y + bar_h], radius=22, fill=pill_fill, outline=border_c, width=3)
+    draw.rounded_rectangle([bx1, bot_y, bx2, bot_y + bar_h], radius=24, fill=pill_fill, outline=border_c, width=3)
     # Text
     draw.text((bx1 + (bar_w - tw) // 2, bot_y + (bar_h - th) // 2 - bbox[1]), clean_cta, fill=(255, 255, 255), font=font)
 
@@ -205,16 +205,16 @@ def draw_fitted_card(
     cx: int,
     cy: int,
     text: str,
-    max_font_size: int = 40,
-    min_font_size: int = 22,
-    max_width: int = 1000,
-    min_width: int = 400,
-    padding_x: int = 40,
+    max_font_size: int = 36,
+    min_font_size: int = 20,
+    max_width: int = 980,
+    min_width: int = 440,
+    padding_x: int = 50,
     padding_y: int = 24,
-    fill_color: Tuple = (15, 23, 42, 230),
+    fill_color: Tuple = (15, 23, 42, 235),
     border_color: Tuple = (234, 179, 8),
     border_width: int = 3,
-    corner_radius: int = 20,
+    corner_radius: int = 22,
     text_color: Tuple = (255, 255, 255)
 ) -> Tuple[int, int, int, int]:
     """

@@ -4,11 +4,18 @@ Facebook Reels Direct Uploader via Meta Graph API v21.0
 and Automatic Pinned Engagement Comment
 """
 import os
+import sys
 import json
 import time
 import requests
 from pathlib import Path
 from typing import Dict, Any, Optional
+
+try:
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+except Exception:
+    pass
 
 LOCAL_TOKENS_PATHS = [
     Path(r"C:\Users\kreg9\logic_pages_tokens.json"),
@@ -63,7 +70,7 @@ def upload_reel_to_facebook(
     Publishes 1080x1920 video to Facebook Reels and optionally posts a pinned engagement comment.
     """
     print("\n" + "=" * 60)
-    print("📘 FACEBOOK REEL PUBLISHING PIPELINE")
+    print("[FACEBOOK] REEL PUBLISHING PIPELINE")
     print(f"Target Page ID: {page_id}")
     print(f"Video File: {video_path}")
     print("=" * 60)
@@ -74,13 +81,13 @@ def upload_reel_to_facebook(
 
     if not access_token:
         err = f"No access token found for Page ID {page_id}"
-        print(f"[facebook] ❌ {err}")
+        print(f"[facebook] [ERROR] {err}")
         return {"status": "failed", "error": err}
 
     vid_path = Path(video_path)
     if not vid_path.exists():
         err = f"Video file not found: {video_path}"
-        print(f"[facebook] ❌ {err}")
+        print(f"[facebook] [ERROR] {err}")
         return {"status": "failed", "error": err}
 
     file_size = vid_path.stat().st_size
@@ -113,7 +120,7 @@ def upload_reel_to_facebook(
         res_start = requests.post(base_url, data=start_payload, timeout=30)
         if res_start.status_code != 200:
             err = f"Start phase error ({res_start.status_code}): {res_start.text}"
-            print(f"[facebook] ❌ {err}")
+            print(f"[facebook] [ERROR] {err}")
             return {"status": "failed", "error": err}
 
         start_json = res_start.json()
@@ -139,7 +146,7 @@ def upload_reel_to_facebook(
         )
         if res_transfer.status_code not in (200, 201):
             err = f"Transfer failed ({res_transfer.status_code}): {res_transfer.text}"
-            print(f"[facebook] ❌ {err}")
+            print(f"[facebook] [ERROR] {err}")
             return {"status": "failed", "error": err}
 
         print("[facebook] Video binary uploaded successfully.")
@@ -157,11 +164,11 @@ def upload_reel_to_facebook(
         res_finish = requests.post(base_url, data=finish_payload, timeout=30)
         if res_finish.status_code != 200:
             err = f"Finish phase failed ({res_finish.status_code}): {res_finish.text}"
-            print(f"[facebook] ❌ {err}")
+            print(f"[facebook] [ERROR] {err}")
             return {"status": "failed", "error": err}
 
         finish_json = res_finish.json()
-        print(f"[facebook] ✅ Reel Published! Success: {finish_json.get('success', True)}")
+        print(f"[facebook] [SUCCESS] Reel Published! Success: {finish_json.get('success', True)}")
 
         # Step 4: Optional Pinned Engagement Comment
         if pinned_comment:
@@ -174,7 +181,7 @@ def upload_reel_to_facebook(
                     "message": pinned_comment
                 }, timeout=15)
                 if c_res.status_code == 200:
-                    print(f"[facebook] 📌 Pinned engagement comment posted successfully!")
+                    print(f"[facebook] [PIN] Pinned engagement comment posted successfully!")
             except Exception as e:
                 print(f"[facebook] Notice posting pinned comment: {e}")
 
@@ -187,5 +194,5 @@ def upload_reel_to_facebook(
 
     except Exception as e:
         err = f"Unexpected upload exception: {e}"
-        print(f"[facebook] ❌ {err}")
+        print(f"[facebook] [ERROR] {err}")
         return {"status": "failed", "error": err}
