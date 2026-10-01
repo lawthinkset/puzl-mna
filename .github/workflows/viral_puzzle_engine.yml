@@ -15,7 +15,7 @@ on:
           - "4"
           - "5"
       mode:
-        description: "Execution Mode (render or publish)"
+        description: "Execution Mode (publish or render)"
         required: true
         default: "publish"
         type: choice
@@ -23,22 +23,22 @@ on:
           - "publish"
           - "render"
       page:
-        description: "Target Page Key (or 'all' for all 8 Facebook pages)"
+        description: "Target Page ID (or 'all' for all 6 Facebook pages)"
         required: false
         default: "all"
         type: string
 
   schedule:
     # 5 Daily Slots in UTC:
-    # Slot 1: 08:00 UTC
+    # Slot 1: 08:00 UTC (13:30 IST)
     - cron: '0 8 * * *'
-    # Slot 2: 12:00 UTC
+    # Slot 2: 12:00 UTC (17:30 IST)
     - cron: '0 12 * * *'
-    # Slot 3: 16:00 UTC
+    # Slot 3: 16:00 UTC (21:30 IST)
     - cron: '0 16 * * *'
-    # Slot 4: 20:00 UTC
+    # Slot 4: 20:00 UTC (01:30 IST next day)
     - cron: '0 20 * * *'
-    # Slot 5: 00:00 UTC
+    # Slot 5: 00:00 UTC (05:30 IST next day)
     - cron: '0 0 * * *'
 
 jobs:
@@ -74,13 +74,23 @@ jobs:
             MODE="${{ github.event.inputs.mode }}"
             PAGE="${{ github.event.inputs.page }}"
           else
-            HOUR=$(date -u +"%H")
-            case "$HOUR" in
-              08) SLOT="1" ;;
-              12) SLOT="2" ;;
-              16) SLOT="3" ;;
-              20) SLOT="4" ;;
-              00|*) SLOT="5" ;;
+            CRON="${{ github.event.schedule }}"
+            case "$CRON" in
+              "0 8 * * *") SLOT="1" ;;
+              "0 12 * * *") SLOT="2" ;;
+              "0 16 * * *") SLOT="3" ;;
+              "0 20 * * *") SLOT="4" ;;
+              "0 0 * * *") SLOT="5" ;;
+              *)
+                HOUR=$(date -u +"%H")
+                case "$HOUR" in
+                  06|07|08|09) SLOT="1" ;;
+                  10|11|12|13) SLOT="2" ;;
+                  14|15|16|17) SLOT="3" ;;
+                  18|19|20|21) SLOT="4" ;;
+                  *)           SLOT="5" ;;
+                esac
+                ;;
             esac
             MODE="publish"
             PAGE="all"
@@ -88,15 +98,19 @@ jobs:
           echo "slot=$SLOT" >> $GITHUB_OUTPUT
           echo "mode=$MODE" >> $GITHUB_OUTPUT
           echo "page=$PAGE" >> $GITHUB_OUTPUT
-          echo "Executing Slot $SLOT | Mode: $MODE | Page: $PAGE"
+          echo "Determined Slot: $SLOT | Mode: $MODE | Target Page: $PAGE"
 
       - name: Run Viral Puzzle Matrix
         env:
           FACEBOOK_PAGES_JSON: ${{ secrets.FACEBOOK_PAGES_JSON }}
           PYTHONUNBUFFERED: "1"
         run: |
-          if [ "${{ steps.params.outputs.page }}" = "all" ]; then
-            python master_runner.py --slot ${{ steps.params.outputs.slot }} --mode ${{ steps.params.outputs.mode }}
-          else
-            python master_runner.py --slot ${{ steps.params.outputs.slot }} --mode ${{ steps.params.outputs.mode }} --page ${{ steps.params.outputs.page }}
+          CMD="python master_runner.py --slot ${{ steps.params.outputs.slot }}"
+          if [ "${{ steps.params.outputs.page }}" != "all" ] && [ -n "${{ steps.params.outputs.page }}" ]; then
+            CMD="$CMD --page ${{ steps.params.outputs.page }}"
           fi
+          if [ "${{ steps.params.outputs.mode }}" = "publish" ]; then
+            CMD="$CMD --publish"
+          fi
+          echo "Executing: $CMD"
+          $CMD

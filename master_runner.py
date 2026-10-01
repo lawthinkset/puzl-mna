@@ -88,7 +88,8 @@ def main():
     parser = argparse.ArgumentParser(description="Master Infinite Viral Puzzle Reel Factory")
     parser.add_argument("--page", type=str, default="all", help="Target Page ID or 'all' to run across all pages")
     parser.add_argument("--slot", type=int, default=None, help="Run specific posting slot (1-5) using cross-page rotation")
-    parser.add_argument("--mode", type=str, default=None, choices=list(ALL_GENERATORS.keys()), help="Force specific puzzle mode")
+    valid_modes = list(ALL_GENERATORS.keys()) + ["publish", "render"]
+    parser.add_argument("--mode", type=str, default=None, choices=valid_modes, help="Force specific puzzle mode or specify 'publish'/'render'")
     parser.add_argument("--count", type=int, default=1, help="Number of reels per target page")
     parser.add_argument("--publish", action="store_true", help="Automatically upload generated reels to Facebook")
     parser.add_argument("--duration", type=float, default=14.0, help="Duration in seconds (default: 14.0)")
@@ -100,21 +101,45 @@ def main():
         print_daily_schedule(5)
         return
 
-    slot_mapping = get_slot_puzzle_mapping(args.slot) if args.slot else {}
+    should_publish = args.publish or (args.mode == "publish")
+    forced_puzzle_mode = args.mode if (args.mode and args.mode not in ("publish", "render")) else None
+
+    # Auto-determine slot from current UTC hour if slot is not explicitly passed
+    current_slot = args.slot
+    if not current_slot:
+        utc_hour = datetime.utcnow().hour
+        if 6 <= utc_hour < 10:
+            current_slot = 1
+        elif 10 <= utc_hour < 14:
+            current_slot = 2
+        elif 14 <= utc_hour < 18:
+            current_slot = 3
+        elif 18 <= utc_hour < 22:
+            current_slot = 4
+        else:
+            current_slot = 5
+        print(f"[master] Auto-detected daily slot #{current_slot} (UTC hour {utc_hour:02d}:00)")
+    else:
+        print(f"[master] Using specified daily slot #{current_slot}")
+
+    slot_mapping = get_slot_puzzle_mapping(current_slot)
 
     if args.page == "all":
         target_pages = [p["page_id"] for p in list_all_pages()]
     else:
         target_pages = [args.page]
 
-    print(f"[master] Starting generation run across {len(target_pages)} page(s) (14s video, strict no-answer policy)...")
+    print(f"[master] Starting generation run across {len(target_pages)} page(s) (14s video, strict no-answer policy, publish={should_publish})...")
 
     results = []
+    failed_pages = []
+    published_count = 0
+
     for page_id in target_pages:
         for idx in range(args.count):
             try:
-                # Mode priority: --mode flag > --slot mapping > random mode
-                mode_to_use = args.mode or slot_mapping.get(page_id, None)
+                # Mode priority: forced_puzzle_mode > slot mapping > random mode
+                mode_to_use = forced_puzzle_mode or slot_mapping.get(page_id, None)
 
                 reel_info = generate_reel_for_page(
                     page_id=page_id,
@@ -124,7 +149,7 @@ def main():
                 )
                 results.append(reel_info)
 
-                if args.publish:
+                if should_publish:
                     print(f"\n[master] Publishing to Facebook Page: {reel_info['page_name']}...")
                     upload_res = upload_reel_to_facebook(
                         video_path=reel_info["video_path"],
@@ -134,15 +159,25 @@ def main():
                         pinned_comment=reel_info["pinned_comment"]
                     )
                     reel_info["upload_result"] = upload_res
+                    if upload_res and upload_res.get("status") == "success":
+                        published_count += 1
+                    else:
+                        failed_pages.append(reel_info['page_name'])
 
             except Exception as e:
                 print(f"[master] ❌ Error generating for page {page_id}: {e}")
+                failed_pages.append(str(page_id))
 
     print("\n" + "=" * 65)
-    print(f"✨ BATCH RUN COMPLETED! Generated {len(results)} reel(s).")
+    print(f"✨ BATCH RUN COMPLETED! Generated {len(results)} reel(s). Published {published_count}/{len(results)}.")
     for r in results:
-        print(f"  • {r['page_name']} -> {Path(r['video_path']).name}")
+        status_str = f"Published (ID: {r.get('upload_result', {}).get('video_id', 'N/A')})" if should_publish else "Rendered"
+        print(f"  • {r['page_name']} -> {Path(r['video_path']).name} [{status_str}]")
     print("=" * 65)
+
+    if should_publish and published_count == 0 and len(target_pages) > 0:
+        print("[master] ❌ CRITICAL: 0 reels published successfully!")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

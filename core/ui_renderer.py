@@ -9,16 +9,23 @@ BASE_DIR = Path(__file__).parent.parent
 FONT_PATH = BASE_DIR / "assets" / "fonts" / "font_bold.ttf"
 
 def get_font(size: int) -> ImageFont.FreeTypeFont:
-    """Loads bold font with Windows/system fallbacks."""
+    """Loads bold font with Windows/Linux system fallbacks."""
     if FONT_PATH.exists():
         try:
             return ImageFont.truetype(str(FONT_PATH), size)
         except Exception:
             pass
-    for win_font in [r"C:\Windows\Fonts\arialbd.ttf", r"C:\Windows\Fonts\segoeuib.ttf", r"C:\Windows\Fonts\impact.ttf"]:
-        if os.path.exists(win_font):
+    for font_file in [
+        r"C:\Windows\Fonts\arialbd.ttf",
+        r"C:\Windows\Fonts\segoeuib.ttf",
+        r"C:\Windows\Fonts\impact.ttf",
+        "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+        "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf"
+    ]:
+        if os.path.exists(font_file):
             try:
-                return ImageFont.truetype(win_font, size)
+                return ImageFont.truetype(font_file, size)
             except Exception:
                 pass
     return ImageFont.load_default()

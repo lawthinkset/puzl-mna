@@ -46,7 +46,7 @@ def load_page_tokens() -> Dict[str, Any]:
 
 def get_token_for_page(page_id: str, tokens: Dict[str, Any]) -> Optional[str]:
     """Resolves token for specific page ID."""
-    entry = tokens.get(page_id)
+    entry = tokens.get(str(page_id)) or tokens.get(page_id)
     if isinstance(entry, dict):
         return entry.get("access_token")
     elif isinstance(entry, str):
