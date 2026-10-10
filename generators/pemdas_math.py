@@ -14,104 +14,126 @@ from core.ui_renderer import (
 )
 from generators.base_generator import BaseGenerator
 
-# Vast infinite pool of viral math equations that incite major debate
+# Curated viral debate templates plus infinite procedural generator
 MATH_TEMPLATES = [
-    {
-        "expr": "40 ÷ 10 × 4 - 4",
-        "opt1": "12",
-        "opt2": "0",
-        "debate": "Is it 12 or 0?"
-    },
-    {
-        "expr": "60 ÷ 5(7 - 5)",
-        "opt1": "24",
-        "opt2": "6",
-        "debate": "Is it 24 or 6?"
-    },
-    {
-        "expr": "8 ÷ 2(2 + 2)",
-        "opt1": "16",
-        "opt2": "1",
-        "debate": "Is it 16 or 1?"
-    },
-    {
-        "expr": "50 - 5 × 0 + 2 + 2",
-        "opt1": "54",
-        "opt2": "4",
-        "debate": "Is it 54 or 4?"
-    },
-    {
-        "expr": "20 + 20 × 0 + 20",
-        "opt1": "40",
-        "opt2": "20",
-        "debate": "Is it 40 or 20?"
-    },
-    {
-        "expr": "10 - 3 × 3 + 1",
-        "opt1": "2",
-        "opt2": "0",
-        "debate": "Is it 2 or 0?"
-    },
-    {
-        "expr": "30 ÷ 5 × 3 + 2",
-        "opt1": "20",
-        "opt2": "4",
-        "debate": "Is it 20 or 4?"
-    },
-    {
-        "expr": "100 - 25 × 2 + 10",
-        "opt1": "60",
-        "opt2": "160",
-        "debate": "Is it 60 or 160?"
-    },
-    {
-        "expr": "12 + 6 ÷ 3 - 2",
-        "opt1": "12",
-        "opt2": "4",
-        "debate": "Is it 12 or 4?"
-    },
-    {
-        "expr": "9 - 3 ÷ 1/3 + 1",
-        "opt1": "9",
-        "opt2": "1",
-        "debate": "Is it 9 or 1?"
-    },
-    {
-        "expr": "6 ÷ 2(1 + 2)",
-        "opt1": "9",
-        "opt2": "1",
-        "debate": "Is it 9 or 1?"
-    },
-    {
-        "expr": "7 + 7 ÷ 7 + 7 × 7 - 7",
-        "opt1": "50",
-        "opt2": "56",
-        "debate": "Is it 50 or 56?"
-    },
-    {
-        "expr": "18 ÷ 3 × 2 + (4 - 2)",
-        "opt1": "14",
-        "opt2": "5",
-        "debate": "Is it 14 or 5?"
-    },
-    {
-        "expr": "15 - 3 × 4 + 6 ÷ 2",
-        "opt1": "6",
-        "opt2": "27",
-        "debate": "Is it 6 or 27?"
-    }
+    {"expr": "40 ÷ 10 × 4 - 4", "opt1": "12", "opt2": "0", "debate": "Is it 12 or 0?"},
+    {"expr": "60 ÷ 5(7 - 5)", "opt1": "24", "opt2": "6", "debate": "Is it 24 or 6?"},
+    {"expr": "8 ÷ 2(2 + 2)", "opt1": "16", "opt2": "1", "debate": "Is it 16 or 1?"},
+    {"expr": "50 - 5 × 0 + 2 + 2", "opt1": "54", "opt2": "4", "debate": "Is it 54 or 4?"},
+    {"expr": "20 + 20 × 0 + 20", "opt1": "40", "opt2": "20", "debate": "Is it 40 or 20?"},
+    {"expr": "10 - 3 × 3 + 1", "opt1": "2", "opt2": "0", "debate": "Is it 2 or 0?"},
+    {"expr": "30 ÷ 5 × 3 + 2", "opt1": "20", "opt2": "4", "debate": "Is it 20 or 4?"},
+    {"expr": "100 - 25 × 2 + 10", "opt1": "60", "opt2": "160", "debate": "Is it 60 or 160?"},
+    {"expr": "12 + 6 ÷ 3 - 2", "opt1": "12", "opt2": "4", "debate": "Is it 12 or 4?"},
+    {"expr": "9 - 3 ÷ 1/3 + 1", "opt1": "9", "opt2": "1", "debate": "Is it 9 or 1?"},
+    {"expr": "6 ÷ 2(1 + 2)", "opt1": "9", "opt2": "1", "debate": "Is it 9 or 1?"},
+    {"expr": "7 + 7 ÷ 7 + 7 × 7 - 7", "opt1": "50", "opt2": "56", "debate": "Is it 50 or 56?"},
+    {"expr": "18 ÷ 3 × 2 + (4 - 2)", "opt1": "14", "opt2": "5", "debate": "Is it 14 or 5?"},
+    {"expr": "15 - 3 × 4 + 6 ÷ 2", "opt1": "6", "opt2": "27", "debate": "Is it 6 or 27?"},
+    {"expr": "36 ÷ 6(2 + 1)", "opt1": "18", "opt2": "2", "debate": "Is it 18 or 2?"},
+    {"expr": "24 ÷ 4 × 2 - 2", "opt1": "10", "opt2": "1", "debate": "Is it 10 or 1?"},
+    {"expr": "80 - 8 × 0 + 4 + 4", "opt1": "88", "opt2": "8", "debate": "Is it 88 or 8?"},
+    {"expr": "10 + 10 × 10 - 10", "opt1": "100", "opt2": "190", "debate": "Is it 100 or 190?"},
+    {"expr": "48 ÷ 2(9 + 3)", "opt1": "288", "opt2": "2", "debate": "Is it 288 or 2?"},
+    {"expr": "25 - 5 ÷ 5 + 5", "opt1": "29", "opt2": "9", "debate": "Is it 29 or 9?"},
+    {"expr": "16 ÷ 4 × 4 ÷ 4", "opt1": "4", "opt2": "1", "debate": "Is it 4 or 1?"},
+    {"expr": "9 + 9 ÷ 9 + 9 × 9 - 9", "opt1": "82", "opt2": "90", "debate": "Is it 82 or 90?"},
+    {"expr": "5 + 5 × 5 - 5 ÷ 5", "opt1": "29", "opt2": "5", "debate": "Is it 29 or 5?"},
+    {"expr": "100 ÷ 10 × 10 ÷ 10", "opt1": "10", "opt2": "1", "debate": "Is it 10 or 1?"},
+    {"expr": "30 - 3 × 3 + 3", "opt1": "24", "opt2": "84", "debate": "Is it 24 or 84?"}
 ]
+
+def generate_procedural_math_puzzle() -> Dict[str, str]:
+    """Generates procedurally synthesized high-debate order-of-operation equations."""
+    archetype = random.choice([
+        "zero_trap",
+        "div_mult_debate",
+        "implicit_bracket",
+        "mdas_hierarchy",
+        "recursive_ident",
+        "fraction_div_trap"
+    ])
+    
+    if archetype == "zero_trap":
+        a = random.choice([20, 30, 40, 50, 60, 70, 80, 90, 100])
+        b = random.randint(2, 9)
+        c = random.randint(2, 8)
+        d = random.randint(1, 6)
+        expr = f"{a} - {b} × 0 + {c} + {d}"
+        correct = a + c + d
+        trap = c + d
+        return {"expr": expr, "opt1": str(correct), "opt2": str(trap), "debate": f"Is it {correct} or {trap}?"}
+
+    elif archetype == "div_mult_debate":
+        b = random.choice([2, 3, 4, 5, 6])
+        k = random.randint(3, 9)
+        a = b * k
+        c = random.choice([2, 3, 4, 5])
+        expr = f"{a} ÷ {b} × {c}"
+        correct = (a // b) * c
+        trap = a // (b * c) if (a % (b * c) == 0) else (b * c)
+        if trap == correct:
+            trap = correct + random.choice([-2, 2])
+        return {"expr": expr, "opt1": str(correct), "opt2": str(trap), "debate": f"Is it {correct} or {trap}?"}
+
+    elif archetype == "implicit_bracket":
+        b = random.choice([2, 3, 4, 5])
+        c = random.randint(1, 4)
+        d = random.randint(1, 4)
+        sum_cd = c + d
+        a = b * sum_cd * random.choice([1, 2])
+        expr = f"{a} ÷ {b}({c} + {d})"
+        correct = (a // b) * sum_cd
+        trap = a // (b * sum_cd)
+        if trap == correct:
+            trap = 1
+        return {"expr": expr, "opt1": str(correct), "opt2": str(trap), "debate": f"Is it {correct} or {trap}?"}
+
+    elif archetype == "mdas_hierarchy":
+        b = random.randint(2, 6)
+        c = random.randint(2, 6)
+        e = random.choice([2, 3, 4])
+        d = e * random.randint(1, 4)
+        a = random.choice([5, 10, 15, 20, 25])
+        expr = f"{a} + {b} × {c} - {d} ÷ {e}"
+        correct = a + (b * c) - (d // e)
+        trap = ((a + b) * c - d) // e
+        if trap == correct:
+            trap = correct + 5
+        return {"expr": expr, "opt1": str(correct), "opt2": str(trap), "debate": f"Is it {correct} or {trap}?"}
+
+    elif archetype == "recursive_ident":
+        n = random.randint(2, 9)
+        expr = f"{n} + {n} ÷ {n} + {n} × {n} - {n}"
+        correct = 1 + (n * n)
+        trap = ((n + n) // n + n) * n - n
+        return {"expr": expr, "opt1": str(correct), "opt2": str(trap), "debate": f"Is it {correct} or {trap}?"}
+
+    else:
+        c = random.choice([2, 3, 4, 5])
+        b = random.randint(1, 3)
+        b_div_inv = b * c
+        a = b_div_inv + random.choice([5, 10, 15])
+        d = random.randint(1, 5)
+        expr = f"{a} - {b} ÷ (1/{c}) + {d}"
+        correct = a - b_div_inv + d
+        trap = a - 1 + d
+        return {"expr": expr, "opt1": str(correct), "opt2": str(trap), "debate": f"Is it {correct} or {trap}?"}
 
 class PemdasMathGenerator(BaseGenerator):
     """
     Generates viral math equation reels with conflicting options A vs B.
-    14-second duration. NEVER reveals the answer—triggers heated comment wars.
+    100+ unique procedural variations. 14-second duration. NEVER reveals the answer—triggers heated comment wars.
     """
     def __init__(self, page_name: str = "MindMath Taps", theme: str = "dark_slate"):
         super().__init__(page_name=page_name, theme=theme)
 
     def generate_puzzle_state(self) -> Dict[str, Any]:
-        item = random.choice(MATH_TEMPLATES)
+        # 50% curated classic debate equations, 50% fresh procedural equations
+        if random.random() < 0.5:
+            item = random.choice(MATH_TEMPLATES)
+        else:
+            item = generate_procedural_math_puzzle()
         
         # 50% random order for A vs B
         swap = random.choice([True, False])

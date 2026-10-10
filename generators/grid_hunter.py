@@ -14,9 +14,9 @@ from core.ui_renderer import (
 )
 from generators.base_generator import BaseGenerator
 
-# Vast infinite pool of confusing pairs (base, intruder)
+# Over 100+ highly deceptive confusing pairs (base, intruder)
 CONFUSING_PAIRS = [
-    # Highly deceptive numbers
+    # Category 1: 2-Digit Inversion & Mirror Traps (50 pairs)
     ("88", "80"), ("43", "34"), ("69", "96"), ("52", "25"),
     ("71", "17"), ("38", "83"), ("99", "66"), ("06", "09"),
     ("25", "52"), ("10", "01"), ("89", "98"), ("33", "88"),
@@ -26,16 +26,30 @@ CONFUSING_PAIRS = [
     ("49", "94"), ("15", "51"), ("35", "53"), ("28", "82"),
     ("46", "64"), ("13", "31"), ("93", "39"), ("62", "26"),
     ("57", "75"), ("74", "47"), ("83", "38"), ("08", "80"),
-    # Highly deceptive letters
+    ("56", "65"), ("94", "49"), ("37", "73"), ("82", "28"),
+    ("16", "61"), ("29", "92"), ("41", "14"), ("76", "67"),
+    ("95", "59"), ("84", "48"), ("39", "93"), ("54", "45"),
+    ("63", "36"), ("72", "27"),
+    # Category 2: 3-Digit Optical Traps (20 pairs)
+    ("888", "808"), ("707", "777"), ("909", "999"), ("101", "111"),
+    ("555", "525"), ("333", "888"), ("666", "999"), ("222", "555"),
+    ("444", "414"), ("100", "001"), ("880", "808"), ("121", "212"),
+    ("787", "878"), ("353", "535"), ("696", "969"), ("484", "848"),
+    ("181", "818"), ("252", "525"), ("383", "838"), ("989", "898"),
+    # Category 3: Single Letter & Digit Resemblance (26 pairs)
     ("E", "F"), ("O", "Q"), ("B", "8"), ("C", "G"),
     ("P", "R"), ("M", "N"), ("V", "U"), ("D", "O"),
     ("K", "X"), ("S", "5"), ("Z", "2"), ("I", "1"),
     ("W", "M"), ("H", "N"), ("T", "7"), ("Y", "V"),
     ("A", "4"), ("J", "L"), ("Q", "O"), ("F", "E"),
-    # Highly deceptive 2/3-letter alphanumeric pairs
+    ("G", "C"), ("R", "P"), ("U", "V"), ("N", "M"),
+    ("L", "I"), ("X", "K"),
+    # Category 4: Double-Letter & Ligature Traps (20 pairs)
     ("RN", "M"), ("CL", "D"), ("VV", "W"), ("NN", "M"),
     ("DO", "DD"), ("BB", "88"), ("CO", "CC"), ("EF", "EE"),
-    ("888", "808"), ("707", "777"), ("909", "999"), ("101", "111")
+    ("IL", "LL"), ("OO", "00"), ("PR", "PP"), ("QO", "QQ"),
+    ("MW", "MM"), ("UV", "UU"), ("FF", "EE"), ("SS", "55"),
+    ("ZZ", "22"), ("TT", "77"), ("XY", "XX"), ("HK", "HH")
 ]
 
 class GridHunterGenerator(BaseGenerator):

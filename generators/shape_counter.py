@@ -24,9 +24,15 @@ class ShapeCounterGenerator(BaseGenerator):
         super().__init__(page_name=page_name, theme=theme)
 
     def generate_puzzle_state(self) -> Dict[str, Any]:
-        # Target digit to count
-        target_char = random.choice(["8", "3", "7", "9", "B", "O"])
-        decoy_char = random.choice(["0", "6", "5", "1", "D", "C"])
+        # Curated optical confusion pairs for counting
+        counter_pairs = [
+            ("8", "0"), ("3", "8"), ("7", "1"), ("9", "6"),
+            ("B", "8"), ("O", "Q"), ("5", "S"), ("2", "Z"),
+            ("E", "F"), ("C", "G"), ("P", "R"), ("M", "N"),
+            ("V", "U"), ("K", "X"), ("D", "O"), ("4", "A"),
+            ("1", "I"), ("6", "0"), ("3", "E"), ("W", "M")
+        ]
+        target_char, decoy_char = random.choice(counter_pairs)
         
         # Exact number of targets to scatter
         target_count = random.randint(14, 24)

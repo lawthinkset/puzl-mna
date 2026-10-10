@@ -33,18 +33,25 @@ def create_smooth_outline(rgba_img: Image.Image, color_rgb=(56, 189, 248), thick
     cv2.drawContours(canvas, contours, -1, rgba, thickness=thickness, lineType=cv2.LINE_AA)
     return Image.fromarray(canvas, mode="RGBA")
 
+def make_solid_silhouette(rgba_img: Image.Image, color_rgba=(15, 23, 42, 240)) -> Image.Image:
+    """Creates a crisp solid dark shadow silhouette from transparent RGBA sprite."""
+    alpha = rgba_img.split()[-1]
+    silhouette = Image.new("RGBA", rgba_img.size, color_rgba)
+    silhouette.putalpha(alpha)
+    return silhouette
+
 MOTION_PATTERNS = [
-    "elliptical_orbit",
-    "laser_ricochet",
+    "orbital_crossing",
+    "figure_eight",
+    "laser_sweep",
     "harmonic_pendulum",
-    "zoom_pulse",
-    "figure_eight"
+    "spiral_cycloid"
 ]
 
 class PauseSilhouetteGenerator(BaseGenerator):
     """
     Generates microsecond 'Pause when it fits the shadow' reflex challenges.
-    Employs 5 distinct motion dynamics and rotates across 100+ 3D assets.
+    Employs 5 dynamic motion trajectories that revolve and sweep directly through the center silhouette.
     14-second duration. NEVER stops automatically—forces viewers to pause on mobile and comment proof.
     """
     def __init__(self, page_name: str = "BrainFocus Taps", theme: str = "dark_slate"):
@@ -56,26 +63,30 @@ class PauseSilhouetteGenerator(BaseGenerator):
         chosen_png = random.choice(valid_pngs) if valid_pngs else None
 
         sprite_img = None
+        shadow_img = None
         outline_img = None
         sprite_name = "Target Item"
         if chosen_png and chosen_png.exists():
             try:
                 sprite_name = chosen_png.stem.replace("_", " ").title()
                 raw = Image.open(chosen_png).convert("RGBA")
-                s_size = 400
+                s_size = 380
                 raw.thumbnail((s_size, s_size), Image.Resampling.LANCZOS)
                 sprite_img = raw
-                outline_color = random.choice([(56, 189, 248), (234, 179, 8), (239, 68, 68), (34, 197, 94)])
+                outline_color = random.choice([(56, 189, 248), (234, 179, 8), (34, 197, 94), (244, 63, 94)])
                 outline_img = create_smooth_outline(raw, color_rgb=outline_color, thickness=8)
+                shadow_img = make_solid_silhouette(raw, color_rgba=(12, 18, 32, 235))
             except Exception:
                 sprite_img = None
+                shadow_img = None
                 outline_img = None
 
         pattern = random.choice(MOTION_PATTERNS)
-        speed_factor = random.uniform(0.7, 1.2)
+        speed_factor = random.uniform(0.9, 1.1)
 
         return {
             "sprite_img": sprite_img,
+            "shadow_img": shadow_img,
             "outline_img": outline_img,
             "sprite_name": sprite_name,
             "pattern": pattern,
@@ -106,12 +117,12 @@ class PauseSilhouetteGenerator(BaseGenerator):
         cy = 900
 
         # Center Target Reticle Rings
-        draw.ellipse([cx - 300, cy - 300, cx + 300, cy + 300], outline=(51, 65, 85, 100), width=4)
-        draw.ellipse([cx - 240, cy - 240, cx + 240, cy + 240], fill=(30, 41, 59, 80), outline=(56, 189, 248, 140), width=3)
-        draw.line([cx - 310, cy, cx - 240, cy], fill=(56, 189, 248, 180), width=4)
-        draw.line([cx + 240, cy, cx + 310, cy], fill=(56, 189, 248, 180), width=4)
-        draw.line([cx, cy - 310, cx, cy - 240], fill=(56, 189, 248, 180), width=4)
-        draw.line([cx, cy + 240, cx, cy + 310], fill=(56, 189, 248, 180), width=4)
+        draw.ellipse([cx - 310, cy - 310, cx + 310, cy + 310], outline=(51, 65, 85, 100), width=4)
+        draw.ellipse([cx - 240, cy - 240, cx + 240, cy + 240], fill=(20, 28, 48, 120), outline=(56, 189, 248, 140), width=3)
+        draw.line([cx - 320, cy, cx - 240, cy], fill=(56, 189, 248, 200), width=4)
+        draw.line([cx + 240, cy, cx + 320, cy], fill=(56, 189, 248, 200), width=4)
+        draw.line([cx, cy - 320, cx, cy - 240], fill=(56, 189, 248, 200), width=4)
+        draw.line([cx, cy + 240, cx, cy + 320], fill=(56, 189, 248, 200), width=4)
 
         sprite = state["sprite_img"]
         outline = state["outline_img"]
@@ -122,29 +133,55 @@ class PauseSilhouetteGenerator(BaseGenerator):
             # Stationary Target Outline in center
             target_x = cx - sw // 2
             target_y = cy - sh // 2
-            pil_frame.paste(outline, (target_x, target_y), outline)
 
-            # Procedural Motion Dynamics
+            # Compute procedural trajectory guaranteed to repeatedly pass through center (dx=0, dy=0)
             pat = state["pattern"]
             spd = state["speed"]
-            freq = 0.5 * spd
+            freq = 0.35 * spd
             
-            if pat == "elliptical_orbit":
-                dx = 380.0 * math.cos(2 * math.pi * freq * t)
-                dy = 240.0 * math.sin(2 * math.pi * freq * t)
-            elif pat == "laser_ricochet":
-                # Multi-harmonic bounce
-                dx = 400.0 * math.sin(2 * math.pi * freq * 1.3 * t)
-                dy = 350.0 * math.cos(2 * math.pi * freq * 0.9 * t)
-            elif pat == "harmonic_pendulum":
-                dx = 420.0 * math.sin(2 * math.pi * freq * t)
-                dy = 120.0 * (1.0 - math.cos(4 * math.pi * freq * t))
+            if pat == "orbital_crossing":
+                # Orbiting while pulsing radius through 0 (passes directly through shadow)
+                f_spin = 0.7 * spd
+                f_pulse = 0.35 * spd
+                R = 380.0 * math.sin(2 * math.pi * f_pulse * t)
+                theta = 2 * math.pi * f_spin * t
+                dx = R * math.cos(theta)
+                dy = R * math.sin(theta)
             elif pat == "figure_eight":
+                # Lissajous infinity curve passing directly through (0, 0)
                 dx = 380.0 * math.sin(2 * math.pi * freq * t)
-                dy = 220.0 * math.sin(4 * math.pi * freq * t)
-            else:  # zoom_pulse
-                dx = 0.0
-                dy = 360.0 * math.sin(2 * math.pi * freq * t)
+                dy = 240.0 * math.sin(4 * math.pi * freq * t)
+            elif pat == "laser_sweep":
+                # Multi-angle linear sweep cutting through center (0, 0)
+                angle = 0.4 * math.pi * math.floor(freq * 2 * t)
+                sweep = 400.0 * math.sin(2 * math.pi * freq * t)
+                dx = sweep * math.cos(angle)
+                dy = sweep * math.sin(angle)
+            elif pat == "harmonic_pendulum":
+                # Pendulum swing passing through (0, 0) at apex of swing
+                max_angle = 0.75
+                theta = max_angle * math.sin(2 * math.pi * freq * t)
+                L = 400.0
+                dx = L * math.sin(theta)
+                dy = -L * (1.0 - math.cos(theta))
+            else:  # spiral_cycloid
+                # Multi-petal rose curve looping through center (0, 0)
+                R = 360.0 * math.sin(3 * 2 * math.pi * (freq / 2) * t)
+                theta = 2 * math.pi * freq * t
+                dx = R * math.cos(theta)
+                dy = R * math.sin(theta)
+
+            dist_to_center = math.hypot(dx, dy)
+            
+            # Draw shadow outline (with alignment flash if sprite is inside target)
+            if dist_to_center < 35.0:
+                # Brief subtle glowing pulse at the exact moment of alignment
+                draw.ellipse([cx - 250, cy - 250, cx + 250, cy + 250], outline=(234, 179, 8, 180), width=6)
+
+            shadow = state.get("shadow_img")
+            if shadow:
+                pil_frame.paste(shadow, (target_x, target_y), shadow)
+            pil_frame.paste(outline, (target_x, target_y), outline)
 
             curr_x = int(target_x + dx)
             curr_y = int(target_y + dy)

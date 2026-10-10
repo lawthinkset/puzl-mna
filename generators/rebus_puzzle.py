@@ -20,92 +20,38 @@ from generators.base_generator import BaseGenerator
 BASE_DIR = Path(__file__).parent.parent
 ASSETS_DIR = BASE_DIR / "assets"
 
-# Expanded high-engagement library of rhyme & rebus equations
+# Expanded high-engagement library of rhyme & rebus equations with verified local assets
 REBUS_PUZZLES = [
-    {
-        "asset_name": "crown.png",
-        "symbol_label": "👑",
-        "rows": [("K", "KING"), ("R", "RING"), ("W", "WING")],
-        "rhyme": "ING"
-    },
-    {
-        "asset_name": "soccer_ball.png",
-        "symbol_label": "⚽",
-        "rows": [("B", "BALL"), ("F", "FALL"), ("W", "WALL")],
-        "rhyme": "ALL"
-    },
-    {
-        "asset_name": "tree.png",
-        "symbol_label": "🌳",
-        "rows": [("T", "TREE"), ("F", "FREE"), ("S", "SEE")],
-        "rhyme": "EE"
-    },
-    {
-        "asset_name": "automobile.png",
-        "symbol_label": "🚗",
-        "rows": [("C", "CAR"), ("B", "BAR"), ("J", "JAR")],
-        "rhyme": "AR"
-    },
-    {
-        "asset_name": "cat.png",
-        "symbol_label": "🐱",
-        "rows": [("C", "CAT"), ("B", "BAT"), ("H", "HAT")],
-        "rhyme": "AT"
-    },
-    {
-        "asset_name": "owl.png",
-        "symbol_label": "🦉",
-        "rows": [("B", "BOWL"), ("H", "HOWL"), ("F", "FOWL")],
-        "rhyme": "OWL"
-    },
-    {
-        "asset_name": "duck.png",
-        "symbol_label": "🦆",
-        "rows": [("D", "DUCK"), ("L", "LUCK"), ("T", "TRUCK")],
-        "rhyme": "UCK"
-    },
-    {
-        "asset_name": "bell.png",
-        "symbol_label": "🔔",
-        "rows": [("B", "BELL"), ("T", "TELL"), ("Y", "YELL")],
-        "rhyme": "ELL"
-    },
-    {
-        "asset_name": "fish.png",
-        "symbol_label": "🐟",
-        "rows": [("F", "FISH"), ("D", "DISH"), ("W", "WISH")],
-        "rhyme": "ISH"
-    },
-    {
-        "asset_name": "pig.png",
-        "symbol_label": "🐷",
-        "rows": [("P", "PIG"), ("B", "BIG"), ("D", "DIG")],
-        "rhyme": "IG"
-    },
-    {
-        "asset_name": "fox.png",
-        "symbol_label": "🦊",
-        "rows": [("F", "FOX"), ("B", "BOX"), ("P", "POX")],
-        "rhyme": "OX"
-    },
-    {
-        "asset_name": "bear.png",
-        "symbol_label": "🐻",
-        "rows": [("B", "BEAR"), ("P", "PEAR"), ("T", "TEAR")],
-        "rhyme": "EAR"
-    },
-    {
-        "asset_name": "ring.png",
-        "symbol_label": "💍",
-        "rows": [("K", "KING"), ("R", "RING"), ("W", "WING")],
-        "rhyme": "ING"
-    },
-    {
-        "asset_name": "star.png",
-        "symbol_label": "⭐",
-        "rows": [("C", "CAR"), ("B", "BAR"), ("J", "JAR")],
-        "rhyme": "AR"
-    }
+    {"asset_name": "crown.png", "symbol_label": "👑", "rows": [("K", "KING"), ("R", "RING"), ("W", "WING")], "rhyme": "ING"},
+    {"asset_name": "ring.png", "symbol_label": "💍", "rows": [("K", "KING"), ("R", "RING"), ("S", "SING")], "rhyme": "ING"},
+    {"asset_name": "soccer_ball.png", "symbol_label": "⚽", "rows": [("B", "BALL"), ("F", "FALL"), ("W", "WALL")], "rhyme": "ALL"},
+    {"asset_name": "tree.png", "symbol_label": "🌳", "rows": [("T", "TREE"), ("F", "FREE"), ("S", "SEE")], "rhyme": "EE"},
+    {"asset_name": "automobile.png", "symbol_label": "🚗", "rows": [("C", "CAR"), ("B", "BAR"), ("J", "JAR")], "rhyme": "AR"},
+    {"asset_name": "star.png", "symbol_label": "⭐", "rows": [("S", "STAR"), ("C", "CAR"), ("F", "FAR")], "rhyme": "AR"},
+    {"asset_name": "cat.png", "symbol_label": "🐱", "rows": [("C", "CAT"), ("B", "BAT"), ("H", "HAT")], "rhyme": "AT"},
+    {"asset_name": "bat.png", "symbol_label": "🦇", "rows": [("B", "BAT"), ("C", "CAT"), ("M", "MAT")], "rhyme": "AT"},
+    {"asset_name": "owl.png", "symbol_label": "🦉", "rows": [("B", "BOWL"), ("H", "HOWL"), ("F", "FOWL")], "rhyme": "OWL"},
+    {"asset_name": "duck.png", "symbol_label": "🦆", "rows": [("D", "DUCK"), ("L", "LUCK"), ("T", "TRUCK")], "rhyme": "UCK"},
+    {"asset_name": "bell.png", "symbol_label": "🔔", "rows": [("B", "BELL"), ("T", "TELL"), ("Y", "YELL")], "rhyme": "ELL"},
+    {"asset_name": "fish.png", "symbol_label": "🐟", "rows": [("F", "FISH"), ("D", "DISH"), ("W", "WISH")], "rhyme": "ISH"},
+    {"asset_name": "tropical_fish.png", "symbol_label": "🐠", "rows": [("F", "FISH"), ("D", "DISH"), ("S", "SWISH")], "rhyme": "ISH"},
+    {"asset_name": "pig.png", "symbol_label": "🐷", "rows": [("P", "PIG"), ("B", "BIG"), ("D", "DIG")], "rhyme": "IG"},
+    {"asset_name": "fox.png", "symbol_label": "🦊", "rows": [("F", "FOX"), ("B", "BOX"), ("P", "POX")], "rhyme": "OX"},
+    {"asset_name": "bear.png", "symbol_label": "🐻", "rows": [("B", "BEAR"), ("P", "PEAR"), ("T", "TEAR")], "rhyme": "EAR"},
+    {"asset_name": "snail.png", "symbol_label": "🐌", "rows": [("S", "SNAIL"), ("T", "TAIL"), ("M", "MAIL")], "rhyme": "AIL"},
+    {"asset_name": "snake.png", "symbol_label": "🐍", "rows": [("S", "SNAKE"), ("C", "CAKE"), ("L", "LAKE")], "rhyme": "AKE"},
+    {"asset_name": "whale.png", "symbol_label": "🐋", "rows": [("W", "WHALE"), ("S", "SALE"), ("T", "TALE")], "rhyme": "ALE"},
+    {"asset_name": "dog.png", "symbol_label": "🐶", "rows": [("D", "DOG"), ("F", "FOG"), ("L", "LOG")], "rhyme": "OG"},
+    {"asset_name": "frog.png", "symbol_label": "🐸", "rows": [("F", "FROG"), ("D", "DOG"), ("B", "BOG")], "rhyme": "OG"},
+    {"asset_name": "fire.png", "symbol_label": "🔥", "rows": [("F", "FIRE"), ("W", "WIRE"), ("T", "TIRE")], "rhyme": "IRE"},
+    {"asset_name": "ant.png", "symbol_label": "🐜", "rows": [("A", "ANT"), ("P", "PANT"), ("C", "CANT")], "rhyme": "ANT"},
+    {"asset_name": "egg.png", "symbol_label": "🥚", "rows": [("E", "EGG"), ("L", "LEG"), ("B", "BEG")], "rhyme": "EG"},
+    {"asset_name": "gem.png", "symbol_label": "💎", "rows": [("G", "GEM"), ("H", "HEM"), ("S", "STEM")], "rhyme": "EM"},
+    {"asset_name": "swan.png", "symbol_label": "🦢", "rows": [("S", "SWAN"), ("F", "FAWN"), ("D", "DAWN")], "rhyme": "AWN"},
+    {"asset_name": "deer.png", "symbol_label": "🦌", "rows": [("D", "DEER"), ("P", "PEER"), ("C", "CHEER")], "rhyme": "EER"},
+    {"asset_name": "honeybee.png", "symbol_label": "🐝", "rows": [("B", "BEE"), ("S", "SEE"), ("F", "FEE")], "rhyme": "EE"},
+    {"asset_name": "trophy.png", "symbol_label": "🏆", "rows": [("W", "WIN"), ("T", "TIN"), ("B", "BIN")], "rhyme": "IN"},
+    {"asset_name": "carrot.png", "symbol_label": "🥕", "rows": [("P", "PARROT"), ("C", "CARROT"), ("T", "TAROT")], "rhyme": "ARROT"}
 ]
 
 # Guarantee 100% of selectable puzzles have real, existing transparent 3D PNG icons on disk
