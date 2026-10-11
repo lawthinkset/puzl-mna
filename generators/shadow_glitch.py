@@ -36,8 +36,18 @@ class ShadowGlitchGenerator(BaseGenerator):
         super().__init__(page_name=page_name, theme=theme)
 
     def generate_puzzle_state(self) -> Dict[str, Any]:
+        EXCLUDED_STEMS = {
+            "japanese_here_button", "japanese_open_for_business_button",
+            "keycap_5", "one_oclock", "empty_nest", "parrot_outline_test",
+            "pause_button", "upwards_button", "green_square", "wilted_flower"
+        }
         pngs = list(ASSETS_DIR.glob("*.png"))
-        valid_pngs = [p for p in pngs if not p.stem.endswith("_outline") and not p.stem.endswith("_test")]
+        valid_pngs = [
+            p for p in pngs 
+            if not p.stem.endswith("_outline") 
+            and not p.stem.endswith("_test")
+            and p.stem.lower() not in EXCLUDED_STEMS
+        ]
         chosen_png = random.choice(valid_pngs) if valid_pngs else None
 
         hero_img = None
